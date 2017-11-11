@@ -3,7 +3,11 @@ package com.hungteshun.gms.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Iterator;
+import java.util.List;
+
 import com.hungteshun.gms.manager.CourseManager;
+import com.hungteshun.gms.model.Course;
 
 /**
  * 课程控制器
@@ -61,7 +65,12 @@ public class CourseController {
 				} else if (MODIFY.equals(state)) {
 
 				} else if (QUERY.equals(state)) {
-
+					List<Course> courseList = CourseManager.getInstance().findCourseList();
+					System.out.println("=========课程列表========");
+					for (Iterator<Course> iter = courseList.iterator(); iter.hasNext();) {
+						Course course = iter.next();
+						System.out.println(course.getCourseId() + ", " + course.getCourseName());
+					}
 				}
 			}
 			System.err.println("正常退出");
