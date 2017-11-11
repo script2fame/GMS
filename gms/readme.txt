@@ -10,5 +10,5 @@ V1.2
 	* 建立CourseController,在console界面选择操作
 
 v1.3
-	* 查询课程列表
+	* 查询所有课程
 	
