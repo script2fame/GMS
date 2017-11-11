@@ -61,9 +61,28 @@ public class CourseController {
 					CourseManager.getInstance().addCourse(courseName);
 					System.out.println("添加课程成功！");
 				} else if (DEL.equals(state)) {
-
+					// 输入的课程id形如：course_id=#
+					String[] courseArray = s.split("=");
+					CourseManager.getInstance().delCourse(Integer.parseInt(courseArray[1]));
+					System.out.println("删除课程成功！！");
 				} else if (MODIFY.equals(state)) {
-
+					// course_id=#,course_name=#
+					// course_name=#,course_id=#
+					String[] courseArray = s.split(",");
+					int courseId = 0;
+					String courseName = "";
+					for (int i = 0; i < courseArray.length; i++) {
+						String[] values = courseArray[i].split("=");
+						if ("course_id".equals(values[0])) {
+							courseId = Integer.parseInt(values[1]);
+						} else if ("course_name".equals(values[0])) {
+							courseName = values[1];
+						}
+					}
+					if (courseArray.length > 0) {
+						CourseManager.getInstance().modifyCourse(courseId, courseName);
+						System.out.println("修改课程成功！！");
+					}
 				} else if (QUERY.equals(state)) {
 					List<Course> courseList = CourseManager.getInstance().findCourseList();
 					System.out.println("=========课程列表========");
