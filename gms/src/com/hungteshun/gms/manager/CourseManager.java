@@ -50,6 +50,7 @@ public class CourseManager {
 		}
 	}
 
+	// 查询所有课程
 	public List<Course> findCourseList() {
 		String sql = "select * from t_course order by course_id";
 		Connection conn = null;
@@ -76,5 +77,51 @@ public class CourseManager {
 			DbUtil.close(conn); // 必须关闭
 		}
 		return courseList;
+	}
+
+	/**
+	 * 根据课程代码删除课程
+	 * 
+	 * @param courseId
+	 */
+	public void delCourse(int courseId) {
+		String sql = "delete from t_course where course_id=?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, courseId);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DbUtil.close(pstmt);
+			DbUtil.close(conn);
+		}
+	}
+
+	/**
+	 * 修改课程
+	 * 
+	 * @param courseId
+	 * @param courseName
+	 */
+	public void modifyCourse(int courseId, String courseName) {
+		String sql = "update t_course set course_name=? where course_id=?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, courseName);
+			pstmt.setInt(2, courseId);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DbUtil.close(pstmt);
+			DbUtil.close(conn);
+		}
 	}
 }
