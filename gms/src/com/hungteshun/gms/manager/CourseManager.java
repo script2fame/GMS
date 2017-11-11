@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import com.hungteshun.gms.util.DbUtil;
 
 /**
- * ¿Î³Ì¹ÜÀíÀà
+ * è¯¾ç¨‹ç®¡ç†ç±»
  * 
  * @author hungteshun
  *
@@ -24,10 +24,10 @@ public class CourseManager {
 	}
 
 	/**
-	 * Ìí¼Ó¿Î³Ì
+	 * æ·»åŠ è¯¾ç¨‹
 	 * 
 	 * @param courseName
-	 *            ¿Î³ÌÃû³Æ
+	 *            è¯¾ç¨‹åç§°
 	 */
 	public void addCourse(String courseName) {
 		String sql = "insert into t_course(course_name) values(?)";
@@ -42,7 +42,7 @@ public class CourseManager {
 			e.printStackTrace();
 		} finally {
 			DbUtil.close(pstmt);
-			DbUtil.close(conn); // ±ØĞë¹Ø±Õ
+			DbUtil.close(conn); // å¿…é¡»å…³é—­
 		}
 	}
 }

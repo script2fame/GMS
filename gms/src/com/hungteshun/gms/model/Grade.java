@@ -1,20 +1,20 @@
 package com.hungteshun.gms.model;
 
 /**
- * ³É¼¨ÊµÌåÀà
+ * æˆç»©å®ä½“ç±»
  * 
  * @author hungteshun
  *
  */
 public class Grade {
 
-	// Ñ§Éú
+	// å­¦ç”Ÿ
 	private Student student;
 
-	// ¿Î³Ì
+	// è¯¾ç¨‹
 	private Course course;
 
-	// ³É¼¨
+	// æˆç»©
 	private float grade;
 
 	public Course getCourse() {

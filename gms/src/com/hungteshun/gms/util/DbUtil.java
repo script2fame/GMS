@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * ·â×°Êı¾İ¿âÏà¹Ø²Ù×÷
+ * å°è£…æ•°æ®åº“ç›¸å…³æ“ä½œ
  * 
  * @author hungteshun
  *
@@ -14,9 +14,9 @@ import java.sql.SQLException;
 public class DbUtil {
 
 	/**
-	 * È¡µÃÊı¾İ¿âµÄÁ¬½Ó
+	 * å–å¾—æ•°æ®åº“çš„è¿æ¥
 	 * 
-	 * @return Ò»¸öÊı¾İ¿âÁ¬½Ó
+	 * @return ä¸€ä¸ªæ•°æ®åº“è¿æ¥
 	 */
 	public static Connection getConnection() {
 		Connection conn = null;

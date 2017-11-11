@@ -3,31 +3,31 @@ package com.hungteshun.gms.model;
 import java.util.Date;
 
 /**
- * Ñ§ÉúÊµÌåÀà
+ * å­¦ç”Ÿå®ä½“ç±»
  * @author hungteshun
  *
  */
 public class Student {
 
-	//Ñ§Éú´úÂë
+	//å­¦ç”Ÿä»£ç 
 	private int studentId;
 	
-	//Ñ§ÉúĞÕÃû
+	//å­¦ç”Ÿå§“å
 	private String studentName;
 	
-	//ĞÔ±ğ
+	//æ€§åˆ«
 	private String sex;
 	
-	//³öÉúÈÕÆÚ
+	//å‡ºç”Ÿæ—¥æœŸ
 	private Date birthday;
 	
-	//ÁªÏµµç»°
+	//è”ç³»ç”µè¯
 	private String contactTel;
 	
-	//µØÖ·
+	//åœ°å€
 	private String address;
 	
-	//ËùÊô°à¼¶
+	//æ‰€å±ç­çº§
 	private Classes classes;
 
 	public int getStudentId() {

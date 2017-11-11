@@ -1,26 +1,26 @@
 package com.hungteshun.gms.model;
 
 /**
- * °à¼¶ÊµÌåÀà
+ * ç­çº§å®ä½“ç±»
  * @author hungteshun
  *
  */
 public class Classes {
 
-	//°à¼¶´úÂë
+	//ç­çº§ä»£ç 
 	private int classesId;
 	
-	//°à¼¶Ãû³Æ
+	//ç­çº§åç§°
 	private String classesName;
 	
-	//ÊÇ·ñÎªÒ¶×Ó,1:ÊÇÒ¶×Ó£¬0£º·ÇÒ¶×Ó
+	//æ˜¯å¦ä¸ºå¶å­,1:æ˜¯å¶å­ï¼Œ0ï¼šéå¶å­
 	private int leaf;
 	
 	//private Classes parent;
 	
 	//private Set<Classes> chilren;
 	
-	//¸¸id
+	//çˆ¶id
 	private int pid;
 
 	public int getClassesId() {

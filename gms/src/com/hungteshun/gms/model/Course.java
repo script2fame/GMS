@@ -1,17 +1,17 @@
 package com.hungteshun.gms.model;
 
 /**
- * ¿Î³ÌÊµÌåÀà
+ * è¯¾ç¨‹å®ä½“ç±»
  * 
  * @author hungteshun
  *
  */
 public class Course {
 
-	// ¿Î³Ì´úÂë
+	// è¯¾ç¨‹ä»£ç 
 	private int courseId;
 
-	// ¿Î³ÌÃû³Æ
+	// è¯¾ç¨‹åç§°
 	private String courseName;
 
 	public int getCourseId() {
