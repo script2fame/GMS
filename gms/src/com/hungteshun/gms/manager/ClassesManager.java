@@ -180,9 +180,10 @@ public class ClassesManager {
 		}
 		return classes;
 	}
-	
+
 	/**
 	 * 修改班级
+	 * 
 	 * @param classesId
 	 * @param classesName
 	 */
@@ -192,18 +193,141 @@ public class ClassesManager {
 		PreparedStatement pstmt = null;
 		try {
 			conn = DbUtil.getConnection();
-			pstmt = conn.prepareStatement(sql);	
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, classesName);
 			pstmt.setInt(2, classesId);
 			pstmt.executeUpdate();
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			DbUtil.close(pstmt);
 			DbUtil.close(conn);
 		}
-		
+
 	}
+
+	/**
+	 * 根据班级代码删除班级
+	 * 
+	 * @param classesId
+	 */
+	public void delClasses(int classesId) {
+		Connection conn = null;
+		try {
+			conn = DbUtil.getConnection();
+
+			// 手动控制事务
+			DbUtil.setAutoCommit(conn, false);
+
+			// 根据classesId取得班级班级对象（主要为了修改其leaf状态为叶子）
+			Classes classes = findClassesById(classesId);
+
+			// 递归删除班级
+			delClasses(conn, classesId);
+
+			// 返回子节点个数
+			int count = getChildren(conn, classes.getPid());
+			// 如果不存在子节点
+			if (count == 0) {
+				// 修改leaf为叶子
+				modifyLeaf(conn, classes.getPid(), 1);
+			}
+			// 提交事务
+			DbUtil.commit(conn);
+		} catch (Exception e) {
+			e.printStackTrace();
+			DbUtil.rollback(conn);
+		} finally {
+			DbUtil.close(conn);
+		}
+	}
+
+	/**
+	 * 递归删除班级
+	 * 
+	 * @param conn
+	 * @param classesId
+	 */
+	private void delClasses(Connection conn, int classesId) throws Exception {
+		String sql = "select * from t_classes where pid=?";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, classesId);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				// 非叶子
+				if (rs.getInt("leaf") == 0) {
+					delClasses(conn, rs.getInt("classes_id"));
+				} else {
+					// 删除
+					delClassesById(conn, rs.getInt("classes_id"));
+				}
+			}
+			// 删除自身
+			delClassesById(conn, classesId);
+			// }catch(SQLException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
+			// throw new SQLException(e.toString());
+			throw e;
+		} finally {
+			DbUtil.close(rs);
+			DbUtil.close(pstmt);
+		}
+	}
+
+	/**
+	 * 删除具体的班级
+	 * 
+	 * @param conn
+	 * @param classesId
+	 */
+	private void delClassesById(Connection conn, int classesId)
+			throws Exception {
+		String sql = "delete from t_classes where classes_id=?";
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, classesId);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DbUtil.close(pstmt);
+		}
+	}
+
+	/**
+	 * 取得当前节点的子节点个数
+	 * 
+	 * @param conn
+	 * @param classsesId
+	 * @return
+	 * @throws SQLException
+	 */
+	private int getChildren(Connection conn, int classsesId)
+			throws SQLException {
+		String sql = "select count(*) from t_classes where pid=?";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int count = 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, classsesId);
+			rs = pstmt.executeQuery();
+			rs.next();
+			// rs.getInt("COUNT(*)")
+			count = rs.getInt(1);
+		} finally {
+			DbUtil.close(rs);
+			DbUtil.close(pstmt);
+		}
+		return count;
+	}
+
 	public static void main(String[] args) {
 		ClassesManager.getInstance().outClassesList();
 	}

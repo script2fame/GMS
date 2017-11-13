@@ -42,6 +42,7 @@ public class ClassesController {
 					System.out.println("请输入添加的班级，格式为：(pid=#,classes_name=#):");
 				} else if (DEL.equals(s)) {
 					state = DEL;
+					System.out.println("请输入删除的班级代码(classes_id=#):");
 				} else if (MODIFY.equals(s)) {
 					state = MODIFY;
 					System.out.println("请输入修改的班级，格式为：(classes_id=#,classes_name=#):");
@@ -56,6 +57,10 @@ public class ClassesController {
 					String classesName = s.substring(s.lastIndexOf("=") + 1,s.length());
 					ClassesManager.getInstance().addClasses(pid, classesName);
 				} else if (DEL.equals(state)) {
+					//classes_id=#	
+					int classesId = Integer.parseInt(s.split("=")[1]);
+					ClassesManager.getInstance().delClasses(classesId);
+					System.out.println("删除班级成功！！");
 				} else if (MODIFY.equals(state)) {
 					//classes_id=#,classes_name=#
 					String[] studentArray = s.split(",");
