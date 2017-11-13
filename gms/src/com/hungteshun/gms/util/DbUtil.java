@@ -65,6 +65,41 @@ public class DbUtil {
 		}
 	}
 
+	public static void setAutoCommit(Connection conn, boolean autoCommit) {
+		try {
+			if (conn != null) {
+				if (conn.getAutoCommit() != autoCommit)
+					conn.setAutoCommit(autoCommit);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void commit(Connection conn) {
+		try {
+			if (conn != null) {
+				if (!conn.getAutoCommit()) {
+					conn.commit();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void rollback(Connection conn) {
+		try {
+			if (conn != null) {
+				if (!conn.getAutoCommit()) {
+					conn.rollback();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) {
 		Connection conn = DbUtil.getConnection();
 		System.out.println(conn);
