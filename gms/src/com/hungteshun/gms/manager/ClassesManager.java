@@ -180,7 +180,30 @@ public class ClassesManager {
 		}
 		return classes;
 	}
-
+	
+	/**
+	 * �޸İ༶
+	 * @param classesId
+	 * @param classesName
+	 */
+	public void modifyClasses(int classesId, String classesName) {
+		String sql = "update t_classes set classes_name=? where classes_id=?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sql);	
+			pstmt.setString(1, classesName);
+			pstmt.setInt(2, classesId);
+			pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DbUtil.close(pstmt);
+			DbUtil.close(conn);
+		}
+		
+	}
 	public static void main(String[] args) {
 		ClassesManager.getInstance().outClassesList();
 	}

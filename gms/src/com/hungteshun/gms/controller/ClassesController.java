@@ -8,23 +8,24 @@ import com.hungteshun.gms.manager.ClassesManager;
 
 /**
  * 班级控制器
+ * 
  * @author Administrator
- *
+ * 
  */
 public class ClassesController {
 
 	private static final String ADD = "1";
-	
+
 	private static final String DEL = "2";
-	
+
 	private static final String MODIFY = "3";
-	
+
 	private static final String QUERY = "4";
-	
+
 	private static final String QUIT = "q";
-	
+
 	private static String state = "";
-	
+
 	public static void main(String[] args) {
 		System.out.println("1-添加班级");
 		System.out.println("2-删除班级");
@@ -39,23 +40,30 @@ public class ClassesController {
 				if (ADD.equals(s)) {
 					state = ADD;
 					System.out.println("请输入添加的班级，格式为：(pid=#,classes_name=#):");
-				}else if (DEL.equals(s)) {
+				} else if (DEL.equals(s)) {
 					state = DEL;
-				}else if (MODIFY.equals(s)) {
+				} else if (MODIFY.equals(s)) {
 					state = MODIFY;
-				}else if (QUERY.equals(s)) {
-					System.out.println("输入回车查询所有的班级");
+					System.out.println("请输入修改的班级，格式为：(classes_id=#,classes_name=#):");
+				} else if (QUERY.equals(s)) {
 					state = QUERY;
-				}else if (QUIT.equalsIgnoreCase(s)){
+					System.out.println("输入回车查询所有的班级");
+				} else if (QUIT.equalsIgnoreCase(s)) {
 					break;
-				}else if (ADD.equals(state)) {
-					//pid=#,classes_name=#
-					int pid = Integer.parseInt(s.substring(s.indexOf("=")+1, s.indexOf(",")));
-					String classesName = s.substring(s.lastIndexOf("=")+1, s.length());
+				} else if (ADD.equals(state)) {
+					// pid=#,classes_name=#
+					int pid = Integer.parseInt(s.substring(s.indexOf("=") + 1,s.indexOf(",")));
+					String classesName = s.substring(s.lastIndexOf("=") + 1,s.length());
 					ClassesManager.getInstance().addClasses(pid, classesName);
-				}else if (DEL.equals(state)) {
-				}else if (MODIFY.equals(state)) {
-				}else if (QUERY.equals(state)) {
+				} else if (DEL.equals(state)) {
+				} else if (MODIFY.equals(state)) {
+					//classes_id=#,classes_name=#
+					String[] studentArray = s.split(",");
+					int classesId = Integer.parseInt(studentArray[0].split("=")[1].trim());
+					String classesName = studentArray[1].split("=")[1];
+					ClassesManager.getInstance().modifyClasses(classesId, classesName);
+					System.out.println("修改班级成功！！");
+				} else if (QUERY.equals(state)) {
 					ClassesManager.getInstance().outClassesList();
 				}
 			}
@@ -71,7 +79,7 @@ public class ClassesController {
 					e.printStackTrace();
 				}
 			}
-		}		
+		}
 	}
 
 }
