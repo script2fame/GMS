@@ -3,13 +3,14 @@ package com.hungteshun.gms.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  * 封装数据库相关操作
  * 
  * @author hungteshun
- *
+ * 
  */
 public class DbUtil {
 
@@ -48,6 +49,16 @@ public class DbUtil {
 		if (conn != null) {
 			try {
 				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void close(ResultSet rs) {
+		if (rs != null) {
+			try {
+				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
