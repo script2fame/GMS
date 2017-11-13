@@ -38,6 +38,7 @@ public class ClassesController {
 			while ((s = br.readLine()) != null) {
 				if (ADD.equals(s)) {
 					state = ADD;
+					System.out.println("请输入添加的班级，格式为：(pid=#,classes_name=#):");
 				}else if (DEL.equals(s)) {
 					state = DEL;
 				}else if (MODIFY.equals(s)) {
@@ -48,6 +49,10 @@ public class ClassesController {
 				}else if (QUIT.equalsIgnoreCase(s)){
 					break;
 				}else if (ADD.equals(state)) {
+					//pid=#,classes_name=#
+					int pid = Integer.parseInt(s.substring(s.indexOf("=")+1, s.indexOf(",")));
+					String classesName = s.substring(s.lastIndexOf("=")+1, s.length());
+					ClassesManager.getInstance().addClasses(pid, classesName);
 				}else if (DEL.equals(state)) {
 				}else if (MODIFY.equals(state)) {
 				}else if (QUERY.equals(state)) {
