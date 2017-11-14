@@ -41,4 +41,10 @@ public interface StudentManager {
 	 * @return
 	 */
 	public List<Student> findStudentList(int pageNo, int pageSize);
+
+	/**
+	 * 查询所有的学生
+	 * @return
+	 */
+	public List<Student> findStudentList();
 }
