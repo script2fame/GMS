@@ -125,4 +125,8 @@ public class StudentManagerImpl implements StudentManager {
 		}		
 	}
 
+	public List<Student> findStudentList() {
+		return findStudentList(1, Integer.MAX_VALUE);
+	}
+	
 }
