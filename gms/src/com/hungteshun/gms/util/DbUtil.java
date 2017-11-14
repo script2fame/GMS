@@ -20,18 +20,34 @@ public class DbUtil {
 	 * @return 一个数据库连接
 	 */
 	public static Connection getConnection() {
+//		Connection conn = null;
+//		try {
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			String dbUrl = "jdbc:oracle:thin:@127.0.0.1:1521:GMS";
+//			String username = "hungteshun";
+//			String password = "hungteshun";
+//			conn = DriverManager.getConnection(dbUrl, username, password);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return conn;
+
+		//使用配置文件取得数据库连接相关参数值
 		Connection conn = null;
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String dbUrl = "jdbc:oracle:thin:@127.0.0.1:1521:GMS";
-			String username = "hungteshun";
-			String password = "hungteshun";
+			String driverName = ExamConfigReader.getInstance().getPropertyValue("dirver-name");
+			String dbUrl = ExamConfigReader.getInstance().getPropertyValue("url");
+			String username = ExamConfigReader.getInstance().getPropertyValue("username");
+			String password = ExamConfigReader.getInstance().getPropertyValue("password");
+			Class.forName(driverName);
 			conn = DriverManager.getConnection(dbUrl, username, password);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}		
 		return conn;
 	}
 
