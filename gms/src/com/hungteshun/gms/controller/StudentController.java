@@ -29,11 +29,9 @@ public class StudentController {
 	private static StudentManager studentManager = null;
 
 	static {
-		String className = ExamConfigReader.getInstance().getPropertyValue(
-				"student-manager-impl");
+		String className = ExamConfigReader.getInstance().getPropertyValue("student-manager-impl");
 		try {
-			studentManager = (StudentManager) Class.forName(className)
-					.newInstance();
+			studentManager = (StudentManager) Class.forName(className).newInstance();
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,13 +57,13 @@ public class StudentController {
 			while ((s = br.readLine()) != null) {
 				if (ADD.equals(s)) {
 					state = ADD;
-					System.out
-							.println("请输入添加的学生(student_name=#,sex=#,birthday=#,contac_tel=#,address=#,classes_id=#):");
+					System.out.println("请输入添加的学生(student_name=#,sex=#,birthday=#,contac_tel=#,address=#,classes_id=#):");
 				} else if (DEL.equals(s)) {
 					state = DEL;
 					System.out.println("请输入删除的学生代码(student_id=#):");
 				} else if (MODIFY.equals(s)) {
 					state = MODIFY;
+					System.out.println("请输入修改的学生信息(student_id=#,student_name=#,sex=#,birthday=#,contac_tel=#,address=#,classes_id=#):");
 				} else if (QUERY.equals(s)) {
 					state = QUERY;
 					System.out.println("分页查询学生，请输入(pageNo=#,pageSize=#):");
@@ -74,7 +72,9 @@ public class StudentController {
 				} else if (ADD.equals(state)) {
 					addStudent(s);
 				} else if (DEL.equals(state)) {
+					delStudent(s);
 				} else if (MODIFY.equals(state)) {
+					modifyStudent(s);
 				} else if (QUERY.equals(state)) {
 					outStudent(s);
 				}
@@ -112,8 +112,7 @@ public class StudentController {
 				student.setSex(values[1]);
 			} else if ("birthday".equals(values[0])) {
 				try {
-					student.setBirthday(new SimpleDateFormat("yyyy-MM-dd")
-							.parse(values[1]));
+					student.setBirthday(new SimpleDateFormat("yyyy-MM-dd").parse(values[1]));
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -142,16 +141,13 @@ public class StudentController {
 		String[] studentArray = s.split(",");
 		int pageNo = Integer.parseInt(studentArray[0].split("=")[1]);
 		int pageSize = Integer.parseInt(studentArray[1].split("=")[1]);
-		List<Student> studentList = studentManager.findStudentList(pageNo,
-				pageSize);
+		List<Student> studentList = studentManager.findStudentList(pageNo,pageSize);
 		for (int i = 0; i < studentList.size(); i++) {
 			Student student = studentList.get(i);
 			System.out.print("学生代码:" + student.getStudentId());
 			System.out.print(", 学生姓名:" + student.getStudentName());
 			System.out.print(", 性别:" + student.getSex());
-			System.out.print(", 出生日期:"
-					+ new SimpleDateFormat("yyyy/MM/dd").format(student
-							.getBirthday()));
+			System.out.print(", 出生日期:"+ new SimpleDateFormat("yyyy/MM/dd").format(student.getBirthday()));
 			System.out.print(", 联系电话:" + student.getContactTel());
 			System.out.print(", 地址:" + student.getAddress());
 			System.out.print(", 班级名称:" + student.getClasses().getClassesName());
@@ -160,10 +156,23 @@ public class StudentController {
 			// System.out.print(", 年龄:" + (System.currentTimeMillis() -
 			// student.getBirthday().getTime())/(1000*60*60*24)/365);
 			long b = 1000L * 60L * 60L * 24L * 365L;
-			long a = System.currentTimeMillis()
-					- student.getBirthday().getTime();
+			long a = System.currentTimeMillis()- student.getBirthday().getTime();
 			System.out.print(", 年龄:" + a / b);
 			System.out.println("");
 		}
 	}
+	
+	private static void modifyStudent(String s) {
+		Student student = makeStudent(s);
+		studentManager.modifyStudent(student);
+		System.out.println("修改学生成功！！");
+	}
+	
+	private static void delStudent(String s) {
+		int studentId = Integer.parseInt(s.split("=")[1]);
+		studentManager.delStudent(studentId);
+		System.out.println("删除学生成功！！");
+	}
+	
+	
 }

@@ -1,2 +1,3 @@
-v2.2
-	* 重构StudentController
+v2.3
+	* 删除学生
+	* 修改学生
