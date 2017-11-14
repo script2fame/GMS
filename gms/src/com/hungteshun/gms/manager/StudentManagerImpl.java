@@ -37,8 +37,20 @@ public class StudentManagerImpl implements StudentManager {
 	}
 
 	public void delStudent(int studentId) {
-		// TODO 删除学生
-
+		String sql = "delete from t_student where student_id=?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, studentId);
+			pstmt.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DbUtil.close(pstmt);
+			DbUtil.close(conn);
+		}
 	}
 
 	public List<Student> findStudentList(int pageNo, int pageSize) {
@@ -90,8 +102,27 @@ public class StudentManagerImpl implements StudentManager {
 	}
 
 	public void modifyStudent(Student student) {
-		// TODO 修改学生
-
+		String sql = "update t_student set classes_id=?, student_name=?, " +
+				"sex=?, birthday=?, contact_tel=?, address=? where student_id=?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, student.getClasses().getClassesId());
+			pstmt.setString(2, student.getStudentName());
+			pstmt.setString(3, student.getSex());
+			pstmt.setDate(4, new java.sql.Date(student.getBirthday().getTime()));
+			pstmt.setString(5, student.getContactTel());
+			pstmt.setString(6, student.getAddress());
+			pstmt.setInt(7, student.getStudentId());
+			pstmt.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DbUtil.close(pstmt);
+			DbUtil.close(conn);
+		}		
 	}
 
 }
