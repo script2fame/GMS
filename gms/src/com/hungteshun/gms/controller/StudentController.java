@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import com.hungteshun.gms.manager.StudentManager;
 import com.hungteshun.gms.manager.StudentManagerImpl;
@@ -37,14 +38,15 @@ public class StudentController {
 			String s = null;
 			while ((s = br.readLine()) != null) {
 				if (ADD.equals(s)) {
-					System.out.println("请输入添加的学生(student_name=#,sex=#,birthday=#,contac_tel=#,address=#,classes_id=#):");
 					state = ADD;
+					System.out.println("请输入添加的学生(student_name=#,sex=#,birthday=#,contac_tel=#,address=#,classes_id=#):");
 				}else if (DEL.equals(s)) {
 					state = DEL;
 				}else if (MODIFY.equals(s)) {
 					state = MODIFY;
 				}else if (QUERY.equals(s)) {
 					state = QUERY;
+					System.out.println("分页查询学生，请输入(pageNo=#,pageSize=#):");
 				}else if (QUIT.equalsIgnoreCase(s)){
 					break;
 				}else if (ADD.equals(state)) {
@@ -82,6 +84,28 @@ public class StudentController {
 				}else if (DEL.equals(state)) {
 				}else if (MODIFY.equals(state)) {
 				}else if (QUERY.equals(state)) {
+					//pageNo=#,pageSize=#
+					String[] studentArray = s.split(",");
+					int pageNo = Integer.parseInt(studentArray[0].split("=")[1]);
+					int pageSize = Integer.parseInt(studentArray[1].split("=")[1]);
+					StudentManager studentManager = new StudentManagerImpl();
+					List<Student> studentList = studentManager.findStudentList(pageNo, pageSize);
+					for (int i=0; i<studentList.size(); i++) {
+						Student student = studentList.get(i);
+						System.out.print("学生代码:" + student.getStudentId());
+						System.out.print(", 学生姓名:" + student.getStudentName());
+						System.out.print(", 性别:" + student.getSex());
+						System.out.print(", 出生日期:" + new SimpleDateFormat("yyyy/MM/dd").format(student.getBirthday()));
+						System.out.print(", 联系电话:" + student.getContactTel());
+						System.out.print(", 地址:" + student.getAddress());
+						System.out.print(", 班级名称:" + student.getClasses().getClassesName());
+						//System.out.print(", 年龄:" + (new Date().getTime() - student.getBirthday().getTime())/(1000*60*60*24)/365);
+						//System.out.print(", 年龄:" + (System.currentTimeMillis() - student.getBirthday().getTime())/(1000*60*60*24)/365);
+						long b = 1000L*60L*60L*24L*365L;
+						long a = System.currentTimeMillis() - student.getBirthday().getTime();
+						System.out.print(", 年龄:" + a/b);
+						System.out.println("");
+					}
 				}
 			}
 			System.err.println("正常退出");
