@@ -11,6 +11,7 @@ import com.hungteshun.gms.manager.StudentManager;
 import com.hungteshun.gms.manager.StudentManagerImpl;
 import com.hungteshun.gms.model.Classes;
 import com.hungteshun.gms.model.Student;
+import com.hungteshun.gms.util.ExamConfigReader;
 
 public class StudentController {
 
@@ -88,7 +89,21 @@ public class StudentController {
 					String[] studentArray = s.split(",");
 					int pageNo = Integer.parseInt(studentArray[0].split("=")[1]);
 					int pageSize = Integer.parseInt(studentArray[1].split("=")[1]);
-					StudentManager studentManager = new StudentManagerImpl();
+					//StudentManager studentManager = new StudentManagerImpl();
+					String className = ExamConfigReader.getInstance().getPropertyValue("student-manager-impl");
+					StudentManager studentManager = null;
+					try {
+						studentManager = (StudentManager) Class.forName(className).newInstance();
+					} catch (InstantiationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					List<Student> studentList = studentManager.findStudentList(pageNo, pageSize);
 					for (int i=0; i<studentList.size(); i++) {
 						Student student = studentList.get(i);
