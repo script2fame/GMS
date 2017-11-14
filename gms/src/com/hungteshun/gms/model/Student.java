@@ -4,8 +4,9 @@ import java.util.Date;
 
 /**
  * 学生实体类
+ * 
  * @author hungteshun
- *
+ * 
  */
 public class Student {
 
@@ -26,6 +27,8 @@ public class Student {
 	
 	//地址
 	private String address;
+	
+	private int age;
 	
 	//所属班级
 	private Classes classes;
@@ -85,5 +88,19 @@ public class Student {
 	public void setClasses(Classes classes) {
 		this.classes = classes;
 	}
+
+	public int getAge() {
+		if (getBirthday() == null) {
+			return -1;
+		}
+		long b = 1000L*60L*60L*24L*365L;
+		long a = System.currentTimeMillis() - getBirthday().getTime();
+		return (int)(a/b);
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
 	
 }

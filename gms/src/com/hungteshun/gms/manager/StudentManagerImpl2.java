@@ -27,4 +27,10 @@ public class StudentManagerImpl2 implements StudentManager {
 
 	}
 
+	@Override
+	public List<Student> findStudentList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

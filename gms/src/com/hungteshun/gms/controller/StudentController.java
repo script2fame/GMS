@@ -1,15 +1,21 @@
 package com.hungteshun.gms.controller;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.hungteshun.gms.manager.StudentManager;
 import com.hungteshun.gms.model.Classes;
 import com.hungteshun.gms.model.Student;
+import com.hungteshun.gms.util.DateUtil;
 import com.hungteshun.gms.util.ExamConfigReader;
 
 public class StudentController {
@@ -21,6 +27,8 @@ public class StudentController {
 	private static final String MODIFY = "3";
 
 	private static final String QUERY = "4";
+	
+	private static final String EXPORT = "5";
 
 	private static final String QUIT = "q";
 
@@ -49,6 +57,7 @@ public class StudentController {
 		System.out.println("2-删除学生");
 		System.out.println("3-修改学生");
 		System.out.println("4-查询学生");
+		System.out.println("5-导出学生信息");
 		System.out.println("q-退出");
 		BufferedReader br = null;
 		try {
@@ -67,6 +76,9 @@ public class StudentController {
 				} else if (QUERY.equals(s)) {
 					state = QUERY;
 					System.out.println("分页查询学生，请输入(pageNo=#,pageSize=#):");
+				} else if (EXPORT.equals(s)) {
+					state = EXPORT;
+					System.out.println("输入回车将学生信息导出到文件");
 				} else if (QUIT.equalsIgnoreCase(s)) {
 					break;
 				} else if (ADD.equals(state)) {
@@ -75,6 +87,8 @@ public class StudentController {
 					delStudent(s);
 				} else if (MODIFY.equals(state)) {
 					modifyStudent(s);
+				} else if (EXPORT.equals(state)) {
+					export();
 				} else if (QUERY.equals(state)) {
 					outStudent(s);
 				}
@@ -174,5 +188,52 @@ public class StudentController {
 		System.out.println("删除学生成功！！");
 	}
 	
-	
+	private static void export() {
+		File file = new File("c:\\student");
+		if (!file.exists()) {
+			file.mkdir();
+		}
+		StringBuffer sbString = new StringBuffer();
+		List<Student> studentList = studentManager.findStudentList();
+		for (Iterator<Student> iter = studentList.iterator(); iter.hasNext();) {
+			Student student = iter.next();
+			sbString.append("学生代码:")
+			.append(student.getStudentId())
+			.append("学生姓名:")
+			.append(student.getStudentName())
+			.append("性别:")
+			.append(student.getSex())
+			.append("出生日期:")
+			.append(DateUtil.formatDate(student.getBirthday()))
+			.append("联系电话:")
+			.append(student.getContactTel())
+			.append("地址:")
+			.append(student.getAddress())
+			.append("班级名称:")
+			.append(student.getClasses().getClassesName()) 
+			.append("年龄:")
+			.append(student.getAge())
+			.append("\n");
+		}
+		
+		String fileName = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒").format(new Date()) + ".dat";
+		BufferedWriter bw = null;
+		try {
+			bw = new BufferedWriter(
+					new FileWriter(
+							new File(file, fileName)));
+			bw.write(sbString.toString());
+			System.out.println("导出文件成功，文件位置：" + file.getPath() + "\\" + fileName);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			if (bw != null) {
+				try {
+					bw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }
