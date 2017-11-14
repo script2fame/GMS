@@ -37,8 +37,6 @@ public class StudentManagerImpl implements StudentManager {
 	}
 
 	public void delStudent(int studentId) {
-		// TODO É¾³ıÑ§Éú
-
 	}
 
 	public List<Student> findStudentList(int pageNo, int pageSize) {
