@@ -67,9 +67,10 @@ public class GradeController {
 					System.out.println("请输入添加的成绩(student_id=#,course_id=#,grade=#):");
 				}else if (DEL.equals(s)) {
 					state = DEL;
-					delGrade(s);
+					System.out.println("请输入删除的学生代码和课程代码(student_id=#,course_id=#):");
 				}else if (MODIFY.equals(s)) {
 					state = MODIFY;
+					System.out.println("请输入修改的成绩(student_id=#,course_id=#,grade=#):");
 				}else if (QUERY.equals(s)) {
 					state = QUERY;
 				}else if (QUIT.equalsIgnoreCase(s)){
@@ -77,7 +78,9 @@ public class GradeController {
 				}else if (ADD.equals(state)) {
 					addGrade(s);
 				}else if (DEL.equals(state)) {
+					delGrade(s);
 				}else if (MODIFY.equals(state)) {
+					modifyGrade(s);
 				}else if (QUERY.equals(state)) {
 				}
 			}
@@ -140,4 +143,14 @@ public class GradeController {
 		gradeManager.delGrade(studentId, courseId);
 		System.out.println("删除成绩成功！！！");
 	}
+	
+	private static void modifyGrade(String s) {
+		Map paramMap = parseParam(s);
+		int studentId = (Integer)paramMap.get("student_id");
+		int courseId = (Integer)paramMap.get("course_id");
+		float grade = (Float)paramMap.get("grade");
+		gradeManager.modifyGrade(studentId, courseId, grade);
+		System.out.println("修改成绩成功！！！");
+	}
+	
 }
