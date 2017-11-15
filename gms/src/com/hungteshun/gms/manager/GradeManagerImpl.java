@@ -54,8 +54,36 @@ public class GradeManagerImpl implements GradeManager {
 	}
 
 	public List<Grade> findGradeList(int pageNo, int pageSize) {
-		// TODO 完成SQL的写法
-		return null;
+		StringBuffer sbSql = new StringBuffer();
+		sbSql.append("select student_id, student_name, classes_name, course_name, grade from ") 
+		.append("(")
+		.append("select rownum as rn, student_id, student_name, classes_name, course_name, grade from ") 
+		.append("(")
+		.append("select g.student_id, s.student_name, cls.classes_name, c.course_name, g.grade ")
+		.append("from t_grade g join t_student s on g.student_id=s.student_id ")
+		.append("join t_classes cls on s.classes_id=cls.classes_id ") 
+		.append("join t_course c on g.course_id=c.course_id order by g.student_id,g.course_id ")
+		.append(") where rownum <=? ")
+		.append(") where rn>? ");	
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<Grade> gradeList = null;
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sbSql.toString());
+			pstmt.setInt(1, pageNo*pageSize);
+			pstmt.setInt(2, (pageNo-1)*pageSize);
+			rs = pstmt.executeQuery();
+			gradeList = makeGradeList(rs);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DbUtil.close(rs);
+			DbUtil.close(pstmt);
+			DbUtil.close(conn); //必须关闭
+		}
+		return gradeList;		
 	}
 
 	public List<Grade> findGradeListByStudentId(int studentId) {
@@ -80,35 +108,7 @@ public class GradeManagerImpl implements GradeManager {
 			pstmt = conn.prepareStatement(sbSql.toString());
 			pstmt.setInt(1, studentId);
 			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				Grade grade = new Grade();
-				
-				//学生
-				Student student = new Student();
-				student.setStudentId(rs.getInt("student_id"));
-				student.setStudentName(rs.getString("student_name"));
-				
-				//班级
-				Classes classes = new Classes();
-				classes.setClassesName(rs.getString("classes_name"));
-				
-				//建立Student和Classes的关联
-				student.setClasses(classes);
-				
-				//建立Grade和Student的关联
-				grade.setStudent(student);
-				
-				//课程
-				Course course = new Course();
-				course.setCourseName(rs.getString("course_name"));
-				
-				//建立Grade和Course的关联
-				grade.setCourse(course);
-				
-				grade.setGrade(rs.getFloat("grade"));
-				
-				gradeList.add(grade);
-			}
+			makeGradeList(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -148,4 +148,37 @@ public class GradeManagerImpl implements GradeManager {
 		}
 	}
 
+	private List<Grade> makeGradeList(ResultSet rs) throws SQLException {
+		List<Grade> gradeList = new ArrayList<Grade>();
+		while (rs.next()) {
+			Grade grade = new Grade();
+			
+			//学生
+			Student student = new Student();
+			student.setStudentId(rs.getInt("student_id"));
+			student.setStudentName(rs.getString("student_name"));
+			
+			//班级
+			Classes classes = new Classes();
+			classes.setClassesName(rs.getString("classes_name"));
+			
+			//建立Student和Classes的关联
+			student.setClasses(classes);
+			
+			//建立Grade和Student的关联
+			grade.setStudent(student);
+			
+			//课程
+			Course course = new Course();
+			course.setCourseName(rs.getString("course_name"));
+			
+			//建立Grade和Course的关联
+			grade.setCourse(course);
+			
+			grade.setGrade(rs.getFloat("grade"));
+			
+			gradeList.add(grade);
+		}	
+		return gradeList;
+	}
 }
