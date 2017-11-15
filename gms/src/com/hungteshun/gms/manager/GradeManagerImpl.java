@@ -31,8 +31,21 @@ public class GradeManagerImpl implements GradeManager {
 	}
 
 	public void delGrade(int studentId, int courseId) {
-		// TODO Auto-generated method stub
-
+		String sql = "delete from t_grade where student_id=? and course_id=?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, studentId);
+			pstmt.setInt(2, courseId);
+			pstmt.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DbUtil.close(pstmt);
+			DbUtil.close(conn);
+		}
 	}
 
 	public List<Grade> findGradeList(int pageNo, int pageSize) {
@@ -56,8 +69,22 @@ public class GradeManagerImpl implements GradeManager {
 	}
 
 	public void modifyGrade(int studentId, int courseId, float grade) {
-		// TODO Auto-generated method stub
-
+		String sql = "update t_grade set grade=? where student_id=? and course_id=?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setFloat(1, grade);
+			pstmt.setInt(2, studentId);
+			pstmt.setInt(3, courseId);
+			pstmt.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DbUtil.close(pstmt);
+			DbUtil.close(conn);
+		}
 	}
 
 }
