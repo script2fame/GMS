@@ -3,11 +3,15 @@ package com.hungteshun.gms.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 import com.hungteshun.gms.manager.GradeManager;
+import com.hungteshun.gms.model.Grade;
 import com.hungteshun.gms.util.ExamConfigReader;
 
 /**
@@ -23,7 +27,7 @@ public class GradeController {
 	
 	private static final String MODIFY = "3";
 	
-	private static final String QUERY = "4";
+	private static final String QUERY_STUDENT_ID = "4";
 	
 	private static final String QUIT = "q";
 	
@@ -34,7 +38,7 @@ public class GradeController {
 	static {
 		String className = ExamConfigReader.getInstance().getPropertyValue("grade-manager-impl");
 		try {
-			Class c = Class.forName(className);
+			Class<?> c = Class.forName(className);
 			gradeManager = (GradeManager)c.newInstance();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -71,8 +75,9 @@ public class GradeController {
 				}else if (MODIFY.equals(s)) {
 					state = MODIFY;
 					System.out.println("请输入修改的成绩(student_id=#,course_id=#,grade=#):");
-				}else if (QUERY.equals(s)) {
-					state = QUERY;
+				}else if (QUERY_STUDENT_ID.equals(s)) {
+					state = QUERY_STUDENT_ID;
+					System.out.println("根据学生代码查询成绩(student_id=#):");
 				}else if (QUIT.equalsIgnoreCase(s)){
 					break;
 				}else if (ADD.equals(state)) {
@@ -81,7 +86,8 @@ public class GradeController {
 					delGrade(s);
 				}else if (MODIFY.equals(state)) {
 					modifyGrade(s);
-				}else if (QUERY.equals(state)) {
+				}else if (QUERY_STUDENT_ID.equals(state)) {
+					findGradeByStudent(s);
 				}
 			}
 			System.err.println("正常退出");
@@ -99,7 +105,7 @@ public class GradeController {
 	}
 	
 	private static void addGrade(String s) {
-		Map paramMap = parseParam(s);
+		Map<String, Number> paramMap = parseParam(s);
 		int studentId = (Integer)paramMap.get("student_id");
 		int courseId = (Integer)paramMap.get("course_id");
 		float grade = (Float)paramMap.get("grade");
@@ -108,8 +114,8 @@ public class GradeController {
 	}
 	
 	
-	private static Map parseParam(String s) {
-		Map paramMap = new HashMap();
+	private static Map<String, Number> parseParam(String s) {
+		Map<String, Number> paramMap = new HashMap<String, Number>();
 		//student_id=#,course_id=#,grade=#
 		StringTokenizer st1 = new StringTokenizer(s, ",");
 		while (st1.hasMoreTokens()) {
@@ -137,7 +143,7 @@ public class GradeController {
 	}	
 	
 	private static void delGrade(String s) {
-		Map paramMap = parseParam(s);
+		Map<String, Number> paramMap = parseParam(s);
 		int studentId = (Integer)paramMap.get("student_id");
 		int courseId = (Integer)paramMap.get("course_id");
 		gradeManager.delGrade(studentId, courseId);
@@ -145,7 +151,7 @@ public class GradeController {
 	}
 	
 	private static void modifyGrade(String s) {
-		Map paramMap = parseParam(s);
+		Map<String, Number> paramMap = parseParam(s);
 		int studentId = (Integer)paramMap.get("student_id");
 		int courseId = (Integer)paramMap.get("course_id");
 		float grade = (Float)paramMap.get("grade");
@@ -153,4 +159,17 @@ public class GradeController {
 		System.out.println("修改成绩成功！！！");
 	}
 	
+	private static void findGradeByStudent(String s) {
+		Map<String, Number> paramMap = parseParam(s);
+		int studentId = (Integer)paramMap.get("student_id");
+		List<Grade> gradeList = gradeManager.findGradeListByStudentId(studentId);
+		for (Iterator<Grade> iter=gradeList.iterator(); iter.hasNext();) {
+			Grade grade = (Grade)iter.next();
+			System.out.print("学生代码:" + grade.getStudent().getStudentId() );
+			System.out.print(" 学生姓名:" + grade.getStudent().getStudentName() );
+			System.out.print(" 所属班级:" + grade.getStudent().getClasses().getClassesName() );
+			System.out.print(" 课程名称:" + grade.getCourse().getCourseName() );
+			System.out.println(" 成绩:" + new DecimalFormat("####.00").format(grade.getGrade()));
+		}
+	}
 }

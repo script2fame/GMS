@@ -1,5 +1,3 @@
-v2.7
-	* 完成修改成绩	
-	* 动态实例化GradeManagerImpl
-	* 重构GradeController，采用Map传递参数
-	* 采用StringTokenizer分解字符串
+v2.8
+	* 完成根据学生代码查询学生成绩
+	* 使用DecimalFormat格式化成小数点后两位	
