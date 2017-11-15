@@ -63,10 +63,11 @@ public class GradeController {
 			String s = null;
 			while ((s = br.readLine()) != null) {
 				if (ADD.equals(s)) {
-					System.out.println("请输入添加的成绩(student_id=#,course_id=#,grade=#):");
 					state = ADD;
+					System.out.println("请输入添加的成绩(student_id=#,course_id=#,grade=#):");
 				}else if (DEL.equals(s)) {
 					state = DEL;
+					delGrade(s);
 				}else if (MODIFY.equals(s)) {
 					state = MODIFY;
 				}else if (QUERY.equals(s)) {
@@ -95,33 +96,6 @@ public class GradeController {
 	}
 	
 	private static void addGrade(String s) {
-//		int studentId = 0;
-//		int courseId = 0;
-//		float grade = 0f;
-//		//student_id=#,course_id=#,grade=#
-//		StringTokenizer st1 = new StringTokenizer(s, ",");
-//		while (st1.hasMoreTokens()) {
-//			//student_id=#
-//			String t1 = st1.nextToken();
-//			StringTokenizer st2 = new StringTokenizer(t1, "=");
-//			if(st2.hasMoreTokens()) {
-//				String leftStr = st2.nextToken();
-//				if ("student_id".equals(leftStr)) {
-//					if (st2.hasMoreTokens()) {
-//						studentId = Integer.parseInt(st2.nextToken());	
-//					}
-//				}else if ("course_id".equals(leftStr)) {
-//					if (st2.hasMoreTokens()) {
-//						courseId = Integer.parseInt(st2.nextToken());	
-//					}
-//				}else if ("grade".equals(leftStr)) {
-//					if (st2.hasMoreTokens()) {
-//						grade = Float.parseFloat(st2.nextToken());	
-//					}
-//				} 
-//			}
-//		}
-		//System.out.println(studentId + ", " + courseId + ", " + grade);
 		Map paramMap = parseParam(s);
 		int studentId = (Integer)paramMap.get("student_id");
 		int courseId = (Integer)paramMap.get("course_id");
@@ -158,4 +132,12 @@ public class GradeController {
 		}
 		return paramMap;
 	}	
+	
+	private static void delGrade(String s) {
+		Map paramMap = parseParam(s);
+		int studentId = (Integer)paramMap.get("student_id");
+		int courseId = (Integer)paramMap.get("course_id");
+		gradeManager.delGrade(studentId, courseId);
+		System.out.println("删除成绩成功！！！");
+	}
 }
