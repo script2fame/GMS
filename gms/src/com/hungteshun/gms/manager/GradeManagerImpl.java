@@ -1,14 +1,33 @@
 package com.hungteshun.gms.manager;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.hungteshun.gms.model.Grade;
+import com.hungteshun.gms.util.DbUtil;
 
 public class GradeManagerImpl implements GradeManager {
 
 	public void addGrade(int studentId, int courseId, float grade) {
-		// TODO Auto-generated method stub
-
+		String sql = "insert into t_grade(student_id, course_id, grade) "
+				+ "values(?, ?, ?)";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, studentId);
+			pstmt.setInt(2, courseId);
+			pstmt.setFloat(3, grade);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DbUtil.close(pstmt);
+			DbUtil.close(conn);
+		}
 	}
 
 	public void delGrade(int studentId, int courseId) {
