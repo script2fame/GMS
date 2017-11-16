@@ -29,6 +29,8 @@ public class GradeController {
 	
 	private static final String QUERY_STUDENT_ID = "4";
 	
+	private static final String QUERY_HIGHER_GRADE = "5";
+	
 	private static final String QUERY_TOP3 = "6";
 	
 	private static final String QUERY = "7";
@@ -88,6 +90,9 @@ public class GradeController {
 				}else if (QUERY_TOP3.equals(s)) {
 					state = QUERY_TOP3;
 					System.out.println("回车查询总分前三名");
+				}else if (QUERY_HIGHER_GRADE.equals(s)) {
+					state = QUERY_HIGHER_GRADE;
+					System.out.println("回车查询每科最高分");
 				}else if (QUERY.equals(s)) {
 					state = QUERY;
 					System.out.println("分页查询学生成绩(pageNo=#,pageSize=#):");
@@ -102,6 +107,8 @@ public class GradeController {
 					modifyGrade(s);
 				}else if (QUERY_STUDENT_ID.equals(state)) {
 					findGradeByStudentById(s);
+				}else if (QUERY_HIGHER_GRADE.equals(state)) {
+					findHigherGradeListOfPerCourse();
 				}else if (QUERY_TOP3.equals(state)) {
 					findGradeListTop3();
 				}else if (QUERY.equals(state)) {
@@ -234,5 +241,10 @@ public class GradeController {
 			System.out.println(" 成绩:"
 					+ new DecimalFormat("####.00").format(grade.getGrade()));
 		}
+	}
+	
+	private static void findHigherGradeListOfPerCourse() {
+		List<Grade> gradeList = gradeManager.findHigherGradeListOfPerCourse();
+		printGradeList(gradeList);
 	}
 }

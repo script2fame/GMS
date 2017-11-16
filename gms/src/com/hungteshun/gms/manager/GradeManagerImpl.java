@@ -170,8 +170,29 @@ public class GradeManagerImpl implements GradeManager {
 	}
 
 	public List<Grade> findHigherGradeListOfPerCourse() {
-		// TODO 完成SQL的写法
-		return null;
+		StringBuffer sbSql = new StringBuffer();
+		sbSql.append("select s.student_id, s.student_name, cls.classes_name, c.course_name, g.grade ");
+		sbSql.append("from t_grade g join t_student s on g.student_id=s.student_id ");
+		sbSql.append("join t_classes cls on s.classes_id=cls.classes_id "); 
+		sbSql.append("join t_course c on g.course_id=c.course_id ");
+		sbSql.append("where g.grade in (select max(gg.grade) from t_grade gg where gg.course_id=c.course_id) ");		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<Grade> gradeList = null;
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sbSql.toString());
+			rs = pstmt.executeQuery();
+			gradeList = makeGradeList(rs);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DbUtil.close(rs);
+			DbUtil.close(pstmt);
+			DbUtil.close(conn); //必须关闭
+		}
+		return gradeList;	
 	}
 
 	public void modifyGrade(int studentId, int courseId, float grade) {
