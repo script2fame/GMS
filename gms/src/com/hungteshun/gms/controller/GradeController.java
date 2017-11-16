@@ -29,6 +29,8 @@ public class GradeController {
 	
 	private static final String QUERY_STUDENT_ID = "4";
 	
+	private static final String QUERY_TOP3 = "6";
+	
 	private static final String QUERY = "7";
 	
 	private static final String QUIT = "q";
@@ -80,6 +82,9 @@ public class GradeController {
 				}else if (QUERY_STUDENT_ID.equals(s)) {
 					state = QUERY_STUDENT_ID;
 					System.out.println("根据学生代码查询成绩(student_id=#):");
+				}else if (QUERY_TOP3.equals(s)) {
+					state = QUERY_TOP3;
+					System.out.println("回车查询总分前三名");
 				}else if (QUERY.equals(s)) {
 					state = QUERY;
 					System.out.println("分页查询学生成绩(pageNo=#,pageSize=#):");
@@ -93,6 +98,8 @@ public class GradeController {
 					modifyGrade(s);
 				}else if (QUERY_STUDENT_ID.equals(state)) {
 					findGradeByStudentById(s);
+				}else if (QUERY_TOP3.equals(state)) {
+					findGradeListTop3();
 				}else if (QUERY.equals(state)) {
 					findGradeList(s);
 				}
@@ -189,6 +196,19 @@ public class GradeController {
 			System.out.print(" 所属班级:"
 					+ grade.getStudent().getClasses().getClassesName());
 			System.out.print(" 课程名称:" + grade.getCourse().getCourseName());
+			System.out.println(" 成绩:"
+					+ new DecimalFormat("####.00").format(grade.getGrade()));
+		}
+	}
+	
+	private static void findGradeListTop3() {
+		List<Grade> gradeList = gradeManager.findGradeListTop3();
+		for (Iterator<Grade> iter = gradeList.iterator(); iter.hasNext();) {
+			Grade grade = (Grade) iter.next();
+			System.out.print("学生代码:" + grade.getStudent().getStudentId());
+			System.out.print(" 学生姓名:" + grade.getStudent().getStudentName());
+			System.out.print(" 所属班级:"
+					+ grade.getStudent().getClasses().getClassesName());
 			System.out.println(" 成绩:"
 					+ new DecimalFormat("####.00").format(grade.getGrade()));
 		}
