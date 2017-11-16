@@ -5,4 +5,4 @@ v3.0
 	* 导出学生信息生成excel
 	* 优化StudentController
 v3.1
-	* 查询总分前三名
+	* 查询成绩总分前三名
