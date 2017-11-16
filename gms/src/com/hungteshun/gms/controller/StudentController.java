@@ -56,6 +56,8 @@ public class StudentController {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("===请输入您要使用的功能序号===");
+		System.out.println("=======================");
 		System.out.println("1-添加学生");
 		System.out.println("2-删除学生");
 		System.out.println("3-修改学生");
@@ -63,6 +65,7 @@ public class StudentController {
 		System.out.println("5-导出学生信息");
 		System.out.println("6-导出生成excel文件");
 		System.out.println("q-退出");
+		System.out.println("=======================");
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(System.in));
@@ -87,7 +90,8 @@ public class StudentController {
 					state = EXPORTEXCEL;
 					System.out.println("输入回车导出学生信息生成excel");
 				} else if (QUIT.equalsIgnoreCase(s)) {
-					break;
+					state = QUIT;
+					System.out.println("是否确定退出？Y|N");
 				} else if (ADD.equals(state)) {
 					addStudent(s);
 				} else if (DEL.equals(state)) {
@@ -100,6 +104,23 @@ public class StudentController {
 					Exportutil.ExportToExcel();
 				} else if (QUERY.equals(state)) {
 					outStudent(s);
+				} else if (QUIT.equals(state)) {
+					if ("Y".equalsIgnoreCase(s)) {
+						System.err.println("成功退出！");
+						break;
+					} else {
+						System.out.println("返回系统，请继续操作:");
+						System.out.println("=======================");
+						System.out.println("1-添加学生");
+						System.out.println("2-删除学生");
+						System.out.println("3-修改学生");
+						System.out.println("4-查询学生");
+						System.out.println("5-导出学生信息");
+						System.out.println("6-导出生成excel文件");
+						System.out.println("q-退出");
+						System.out.println("=======================");
+						continue;
+					}
 				}
 			}
 			System.err.println("正常退出");

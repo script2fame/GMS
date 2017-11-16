@@ -3,3 +3,4 @@ v2.9
 	* 分页查询成绩信息
 v3.0
 	* 导出学生信息到excel
+	* 优化StudentController
