@@ -27,11 +27,15 @@ public class ClassesController {
 	private static String state = "";
 
 	public static void main(String[] args) {
+		
+		System.out.println("===请输入您要使用的功能序号===");
+		System.out.println("=======================");
 		System.out.println("1-添加班级");
 		System.out.println("2-删除班级");
 		System.out.println("3-修改班级");
 		System.out.println("4-查询班级");
 		System.out.println("q-退出");
+		System.out.println("=======================");
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(System.in));
@@ -50,7 +54,8 @@ public class ClassesController {
 					state = QUERY;
 					System.out.println("输入回车查询所有的班级");
 				} else if (QUIT.equalsIgnoreCase(s)) {
-					break;
+					state = QUIT;
+					System.out.println("是否确定退出？Y|N");
 				} else if (ADD.equals(state)) {
 					// pid=#,classes_name=#
 					int pid = Integer.parseInt(s.substring(s.indexOf("=") + 1,s.indexOf(",")));
@@ -70,6 +75,21 @@ public class ClassesController {
 					System.out.println("修改班级成功！！");
 				} else if (QUERY.equals(state)) {
 					ClassesManager.getInstance().outClassesList();
+				} else if (QUIT.equals(state)) {
+					if ("Y".equalsIgnoreCase(s)) {
+						System.err.println("成功退出！");
+						break;
+					} else {
+						System.out.println("返回系统，请继续操作:");
+						System.out.println("=======================");
+						System.out.println("1-添加班级");
+						System.out.println("2-删除班级");
+						System.out.println("3-修改班级");
+						System.out.println("4-查询班级");
+						System.out.println("q-退出");
+						System.out.println("=======================");
+						continue;
+					}
 				}
 			}
 			System.err.println("正常退出");

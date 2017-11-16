@@ -120,8 +120,53 @@ public class GradeManagerImpl implements GradeManager {
 	}
 
 	public List<Grade> findGradeListTop3() {
-		// TODO 完成SQL的写法
-		return null;
+		StringBuilder sbSql = new StringBuilder(); 
+		sbSql.append("select * from "); 
+		sbSql.append("(");
+		sbSql.append("select g.student_id, s.student_name, cls.classes_name, sum(g.grade) total_grade "); 
+		sbSql.append("from t_grade g join t_student s on g.student_id=s.student_id ");
+		sbSql.append("join t_classes cls on s.classes_id=cls.classes_id ");
+		sbSql.append("group by g.student_id, s.student_name, cls.classes_name "); 
+		sbSql.append("order by total_grade desc ");
+		sbSql.append(") where rownum <=3 ");
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<Grade> gradeList = new ArrayList<Grade>();
+		try {
+			conn = DbUtil.getConnection();
+			pstmt = conn.prepareStatement(sbSql.toString());
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Grade grade = new Grade();
+				
+				//学生
+				Student student = new Student();
+				student.setStudentId(rs.getInt("student_id"));
+				student.setStudentName(rs.getString("student_name"));
+				
+				//班级
+				Classes classes = new Classes();
+				classes.setClassesName(rs.getString("classes_name"));
+				
+				//建立Student和Classes的关联
+				student.setClasses(classes);
+				
+				//建立Grade和Student的关联
+				grade.setStudent(student);
+				
+				grade.setGrade(rs.getFloat("total_grade"));
+				
+				gradeList.add(grade);				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DbUtil.close(rs);
+			DbUtil.close(pstmt);
+			DbUtil.close(conn); //必须关闭
+		}
+		return gradeList;		
 	}
 
 	public List<Grade> findHigherGradeListOfPerCourse() {

@@ -30,11 +30,14 @@ public class CourseController {
 	private static String state = "";
 
 	public static void main(String[] args) {
+		System.out.println("===请输入您要使用的功能序号===");
+		System.out.println("=======================");
 		System.out.println("1-添加课程");
 		System.out.println("2-删除课程");
 		System.out.println("3-修改课程");
 		System.out.println("4-查询课程");
 		System.out.println("q-退出");
+		System.out.println("=======================");
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(System.in));
@@ -53,7 +56,8 @@ public class CourseController {
 					System.out.println("输入回车查询所有的课程列表");
 					state = QUERY;
 				} else if (QUIT.equalsIgnoreCase(s)) {
-					break;
+					state = QUIT;
+					System.out.println("是否确定退出？Y|N");
 				} else if (ADD.equals(state)) {
 					String[] courseArray = s.split("=");
 					// 取得课程名称
@@ -89,6 +93,21 @@ public class CourseController {
 					for (Iterator<Course> iter = courseList.iterator(); iter.hasNext();) {
 						Course course = iter.next();
 						System.out.println(course.getCourseId() + ", " + course.getCourseName());
+					}
+				}else if (QUIT.equals(state)) {
+					if ("Y".equalsIgnoreCase(s)) {
+						System.err.println("成功退出！");
+						break;
+					} else {
+						System.out.println("返回系统，请继续操作:");
+						System.out.println("=======================");
+						System.out.println("1-添加课程");
+						System.out.println("2-删除课程");
+						System.out.println("3-修改课程");
+						System.out.println("4-查询课程");
+						System.out.println("q-退出");
+						System.out.println("=======================");
+						continue;
 					}
 				}
 			}
