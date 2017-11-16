@@ -17,6 +17,7 @@ import com.hungteshun.gms.model.Classes;
 import com.hungteshun.gms.model.Student;
 import com.hungteshun.gms.util.DateUtil;
 import com.hungteshun.gms.util.ExamConfigReader;
+import com.hungteshun.gms.util.Exportutil;
 
 public class StudentController {
 
@@ -29,6 +30,8 @@ public class StudentController {
 	private static final String QUERY = "4";
 	
 	private static final String EXPORT = "5";
+	
+	private static final String EXPORTEXCEL = "6";
 
 	private static final String QUIT = "q";
 
@@ -58,6 +61,7 @@ public class StudentController {
 		System.out.println("3-修改学生");
 		System.out.println("4-查询学生");
 		System.out.println("5-导出学生信息");
+		System.out.println("6-导出生成excel文件");
 		System.out.println("q-退出");
 		BufferedReader br = null;
 		try {
@@ -79,6 +83,9 @@ public class StudentController {
 				} else if (EXPORT.equals(s)) {
 					state = EXPORT;
 					System.out.println("输入回车将学生信息导出到文件");
+				} else if(EXPORTEXCEL.equals(s)){
+					state = EXPORTEXCEL;
+					System.out.println("输入回车导出学生信息生成excel");
 				} else if (QUIT.equalsIgnoreCase(s)) {
 					break;
 				} else if (ADD.equals(state)) {
@@ -88,7 +95,9 @@ public class StudentController {
 				} else if (MODIFY.equals(state)) {
 					modifyStudent(s);
 				} else if (EXPORT.equals(state)) {
-					export();
+					exportToTxt();
+				} else if(EXPORTEXCEL.equals(state)){
+					Exportutil.ExportToExcel();
 				} else if (QUERY.equals(state)) {
 					outStudent(s);
 				}
@@ -106,6 +115,7 @@ public class StudentController {
 			}
 		}
 	}
+
 
 	/**
 	 * 构造Student对象
@@ -188,7 +198,7 @@ public class StudentController {
 		System.out.println("删除学生成功！！");
 	}
 	
-	private static void export() {
+	private static void exportToTxt() {
 		File file = new File("c:\\student");
 		if (!file.exists()) {
 			file.mkdir();
