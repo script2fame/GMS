@@ -57,6 +57,8 @@ public class GradeController {
 	}
 	
 	public static void main(String[] args) {
+		System.out.println("===请输入您要使用的功能序号===");
+		System.out.println("=======================");
 		System.out.println("1-添加成绩");
 		System.out.println("2-删除成绩");
 		System.out.println("3-修改成绩");
@@ -65,6 +67,7 @@ public class GradeController {
 		System.out.println("6-查询总分前三名");
 		System.out.println("7-分页查询");
 		System.out.println("q-退出");
+		System.out.println("=======================");
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(System.in));
@@ -89,7 +92,8 @@ public class GradeController {
 					state = QUERY;
 					System.out.println("分页查询学生成绩(pageNo=#,pageSize=#):");
 				}else if (QUIT.equalsIgnoreCase(s)){
-					break;
+					state = QUIT;
+					System.out.println("是否确定退出？Y|N");
 				}else if (ADD.equals(state)) {
 					addGrade(s);
 				}else if (DEL.equals(state)) {
@@ -102,6 +106,24 @@ public class GradeController {
 					findGradeListTop3();
 				}else if (QUERY.equals(state)) {
 					findGradeList(s);
+				}else if (QUIT.equals(state)) {
+					if ("Y".equalsIgnoreCase(s)) {
+						System.err.println("成功退出！");
+						break;
+					} else {
+						System.out.println("返回系统，请继续操作:");
+						System.out.println("=======================");
+						System.out.println("1-添加成绩");
+						System.out.println("2-删除成绩");
+						System.out.println("3-修改成绩");
+						System.out.println("4-根据学生代码查询成绩");
+						System.out.println("5-查询每科最高分");
+						System.out.println("6-查询总分前三名");
+						System.out.println("7-分页查询");
+						System.out.println("q-退出");
+						System.out.println("=======================");
+						continue;
+					}
 				}
 			}
 			System.err.println("正常退出");

@@ -6,3 +6,4 @@ v3.0
 	* 优化StudentController
 v3.1
 	* 查询成绩总分前三名
+	* 优化其他controller
